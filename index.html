@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Welcome | Luu Van Huy</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            background: url('https://i.ibb.co/9HVsxcF1/hinh-anh-avatar-anime-chibi-boy-3.jpg') center/cover no-repeat fixed;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+        }
+
+        /* Lớp phủ mờ */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 5, 15, 0.45);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 0;
+        }
+
+        /* ===== WELCOME OVERLAY - MƯỢT HƠN ===== */
+        .welcome-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(10, 5, 15, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            will-change: transform, opacity;
+        }
+
+        .welcome-overlay.hidden {
+            opacity: 0;
+            transform: scale(1.04);
+            pointer-events: none;
+        }
+
+        .welcome-wrapper {
+            display: flex;
+            gap: 6px;
+            perspective: 800px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .welcome-char {
+            font-size: 64px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffb7c5, #ff8aae, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 50px rgba(255, 107, 157, 0.4), 0 0 100px rgba(255, 107, 157, 0.15);
+            -webkit-text-stroke: 1.5px rgba(255, 107, 157, 0.15);
+            opacity: 0;
+            transform: translateX(80px) scale(0.7);
+            animation: slideChar 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            filter: blur(3px);
+            display: inline-block;
+            will-change: transform, opacity, filter;
+        }
+
+        .welcome-char:nth-child(1) { animation-delay: 0.03s; }
+        .welcome-char:nth-child(2) { animation-delay: 0.08s; }
+        .welcome-char:nth-child(3) { animation-delay: 0.13s; }
+        .welcome-char:nth-child(4) { animation-delay: 0.18s; }
+        .welcome-char:nth-child(5) { animation-delay: 0.23s; }
+        .welcome-char:nth-child(6) { animation-delay: 0.28s; }
+        .welcome-char:nth-child(7) { animation-delay: 0.33s; }
+
+        .welcome-char::after {
+            content: attr(data-char);
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #ffb7c5, #ff8aae, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: blur(30px);
+            opacity: 0.3;
+            z-index: -1;
+            animation: glowPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes slideChar {
+            0% {
+                opacity: 0;
+                transform: translateX(80px) scale(0.7);
+                filter: blur(3px);
+            }
+            40% {
+                opacity: 0.8;
+                transform: translateX(-8px) scale(1.04);
+                filter: blur(0.5px);
+            }
+            65% {
+                transform: translateX(4px) scale(0.99);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% { opacity: 0.15; filter: blur(20px); }
+            100% { opacity: 0.4; filter: blur(40px); }
+        }
+
+        /* ===== CARD CHÍNH ===== */
+        .card {
+            position: relative;
+            z-index: 2;
+            max-width: 420px;
+            width: 100%;
+            background: rgba(255, 182, 193, 0.08);
+            backdrop-filter: blur(18px) saturate(1.3);
+            -webkit-backdrop-filter: blur(18px) saturate(1.3);
+            border-radius: 48px;
+            padding: 28px 22px 24px;
+            border: 1.5px solid transparent;
+            background-clip: padding-box;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 15px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 182, 193, 0.06);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px 0;
+            cursor: default;
+        }
+
+        /* === VIỀN PHÁT SÁNG === */
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50px;
+            padding: 3px;
+            background: conic-gradient(from 0deg,
+                    #ff6b9d, #ffb7c5, #ffffff, #ffb7c5,
+                    #ff6b9d, #ff8aae, #ffffff, #ff6b9d);
+            background-size: 400% 400%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            animation: borderGlowSpin 4s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes borderGlowSpin {
+            0% { background-position: 0% 50%; filter: hue-rotate(0deg); }
+            50% { background-position: 100% 50%; filter: hue-rotate(10deg); }
+            100% { background-position: 0% 50%; filter: hue-rotate(0deg); }
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 52px;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 107, 157, 0.15), transparent 70%);
+            filter: blur(15px);
+            opacity: 0.4;
+            z-index: -1;
+            animation: glowPulseCard 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glowPulseCard {
+            0% { opacity: 0.2; transform: scale(0.95); }
+            100% { opacity: 0.6; transform: scale(1.05); }
+        }
+
+        /* ===== GIỌT NƯỚC RƠI ===== */
+        .card-drops {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 10;
+            border-radius: 48px;
+            overflow: hidden;
+        }
+
+        .card-drop {
+            position: absolute;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            background: rgba(255, 255, 255, 0.10);
+            filter: blur(0.8px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.03), inset 0 -4px 10px rgba(255, 255, 255, 0.06);
+            animation: dropFall 7s ease-in-out infinite;
+            transform-origin: center;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            will-change: transform, opacity;
+        }
+
+        .card-drop::after {
+            content: '';
+            position: absolute;
+            top: 12%;
+            left: 22%;
+            width: 30%;
+            height: 22%;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            filter: blur(1.5px);
+        }
+
+        .card-drop::before {
+            content: '';
+            position: absolute;
+            bottom: 15%;
+            right: 15%;
+            width: 15%;
+            height: 12%;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            filter: blur(1px);
+        }
+
+        @keyframes dropFall {
+            0% { transform: translateY(-20px) scale(0.6) rotate(0deg); opacity: 0; }
+            15% { transform: translateY(5px) scale(1.05) rotate(2deg); opacity: 0.6; }
+            30% { transform: translateY(15px) scale(1.02) rotate(-1deg); opacity: 0.8; }
+            60% { transform: translateY(40px) scale(0.95) rotate(3deg); opacity: 0.7; }
+            85% { transform: translateY(70px) scale(1.01) rotate(-2deg); opacity: 0.5; }
+            100% { transform: translateY(100px) scale(0.7) rotate(5deg); opacity: 0; }
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffb7c5, #ff8aae, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(255, 107, 157, 0.3), 0 0 80px rgba(255, 107, 157, 0.1);
+            -webkit-text-stroke: 0.5px rgba(255, 107, 157, 0.1);
+            animation: titleGlow 2.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px rgba(255, 107, 157, 0.2); }
+            100% { text-shadow: 0 0 50px rgba(255, 107, 157, 0.5), 0 0 80px rgba(255, 107, 157, 0.2); }
+        }
+
+        .header p {
+            color: #f0d0e0;
+            font-size: 14px;
+            margin-top: 2px;
+            letter-spacing: 3px;
+            font-weight: 300;
+            opacity: 0.8;
+            text-shadow: 0 0 15px rgba(255, 107, 157, 0.1);
+        }
+
+        /* ===== DATETIME ===== */
+        .datetime {
+            text-align: center;
+            padding: 10px 16px;
+            margin-bottom: 12px;
+            border-radius: 24px;
+            background: rgba(255, 182, 193, 0.05);
+            border: 1px solid rgba(255, 182, 193, 0.08);
+            width: 100%;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 182, 193, 0.05);
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .datetime::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 26px;
+            padding: 2px;
+            background: linear-gradient(135deg, #ff6b9d, #ffb7c5, #ff8aae);
+            background-size: 300% 300%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            animation: borderGlowSocial 3s ease-in-out infinite;
+            opacity: 0.4;
+        }
+
+        .datetime:hover {
+            border-color: rgba(255, 107, 157, 0.2);
+            box-shadow: 0 4px 30px rgba(255, 107, 157, 0.05), 0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 182, 193, 0.08);
+        }
+
+        .datetime .time {
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 3px;
+            text-shadow: 0 0 25px rgba(255, 107, 157, 0.2), 0 0 50px rgba(255, 107, 157, 0.08);
+            -webkit-text-stroke: 0.3px rgba(255, 107, 157, 0.05);
+        }
+
+        .datetime .date {
+            font-size: 13px;
+            color: #e0c0d0;
+            margin-top: 2px;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 12px rgba(255, 107, 157, 0.08);
+        }
+
+        /* ===== MUSIC ===== */
+        .music-section {
+            width: 100%;
+            text-align: center;
+            padding: 6px 0 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .song-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffb7c5;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.12);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.06);
+            position: relative;
+            cursor: pointer;
+            transition: height 0.2s ease;
+            pointer-events: auto;
+            overflow: hidden;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 99px;
+            padding: 1px;
+            background: linear-gradient(90deg, #ff6b9d, #ffb7c5, #ff8aae);
+            background-size: 300% 100%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            animation: borderGlowSocial 2.5s ease-in-out infinite;
+            opacity: 0.5;
+        }
+
+        .progress-bar:hover {
+            height: 6px;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #ff8aae, #ffb7c5);
+            box-shadow: 0 0 20px rgba(255, 100, 180, 0.15);
+            transition: width 0.1s linear;
+        }
+
+        .progress-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #b090a0;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+            width: 100%;
+        }
+
+        .music-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            margin-top: 10px;
+            width: 100%;
+            pointer-events: auto;
+        }
+
+        .music-btn {
+            padding: 6px 18px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 182, 193, 0.15);
+            background: rgba(255, 182, 193, 0.04);
+            color: #ffb7c5;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            min-width: 80px;
+            text-shadow: 0 0 12px rgba(255, 107, 157, 0.08);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 182, 193, 0.03);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .music-btn::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 32px;
+            padding: 2px;
+            background: linear-gradient(135deg, #ff6b9d, #ffb7c5, #ff8aae);
+            background-size: 300% 300%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            animation: borderGlowSocial 2.5s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        .music-btn:hover::before {
+            opacity: 0.8;
+        }
+
+        .music-btn:hover {
+            background: rgba(255, 182, 193, 0.08);
+            border-color: rgba(255, 107, 157, 0.25);
+            box-shadow: 0 4px 25px rgba(255, 107, 157, 0.08), 0 2px 10px rgba(0, 0, 0, 0.15);
+            transform: scale(1.03);
+        }
+
+        .music-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* ===== SOCIAL ===== */
+        .social-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 14px;
+            width: 100%;
+            pointer-events: auto;
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border-radius: 18px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 182, 193, 0.08);
+            background: rgba(255, 182, 193, 0.03);
+            color: #f0d8e8;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 182, 193, 0.03);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .social-item::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg, #ff6b9d, #ffb7c5, #ff8aae, #ff6b9d, #ffffff, #ff8aae);
+            background-size: 400% 400%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            animation: borderGlowSocial 3s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        .social-item:hover::before {
+            opacity: 0.9;
+        }
+
+        @keyframes borderGlowSocial {
+            0% { background-position: 0% 50%; opacity: 0.3; }
+            50% { background-position: 100% 50%; opacity: 0.8; }
+            100% { background-position: 0% 50%; opacity: 0.3; }
+        }
+
+        .social-item:hover {
+            transform: translateY(-3px) scale(1.02);
+            background: rgba(255, 182, 193, 0.06);
+            border-color: rgba(255, 107, 157, 0.15);
+            box-shadow: 0 6px 25px rgba(255, 107, 157, 0.06), 0 4px 15px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 182, 193, 0.05);
+        }
+
+        .social-item .icon {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-item .icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #ffb7c5;
+            filter: drop-shadow(0 0 6px rgba(255, 107, 157, 0.2));
+            transition: fill 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .social-item:hover .icon svg {
+            fill: #ff8aae;
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 15px rgba(255, 107, 157, 0.4));
+        }
+
+        .social-item .text {
+            flex: 1;
+            font-size: 13px;
+            text-shadow: 0 0 10px rgba(255, 107, 157, 0.06);
+        }
+
+        .social-item .arrow {
+            color: #b090a0;
+            font-size: 14px;
+            transition: transform 0.2s ease, color 0.2s ease;
+            text-shadow: 0 0 8px rgba(255, 107, 157, 0.04);
+        }
+
+        .social-item:hover .arrow {
+            transform: translateX(4px);
+            color: #ffb7c5;
+        }
+
+        /* ===== HOA ANH ĐÀO RƠI NỀN ===== */
+        .sakura-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .sakura-bg .sakura {
+            position: absolute;
+            top: -30px;
+            color: #ffb7c5;
+            font-size: 22px;
+            opacity: 0.5;
+            animation: sakuraFall linear infinite;
+            text-shadow: 0 0 15px rgba(255, 150, 200, 0.2);
+            user-select: none;
+        }
+
+        @keyframes sakuraFall {
+            0% { transform: translateY(-30px) rotate(0deg) scale(0.6); opacity: 0.4; }
+            30% { opacity: 0.7; }
+            70% { opacity: 0.6; }
+            100% { transform: translateY(110vh) rotate(720deg) scale(1.2); opacity: 0.03; }
+        }
+
+        /* ===== HIỆU ỨNG CLICK ===== */
+        .click-effect-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 50;
+            overflow: hidden;
+        }
+
+        .click-sakura {
+            position: absolute;
+            font-size: 28px;
+            opacity: 0;
+            animation: clickSakuraFall 2.5s cubic-bezier(0.22, 0.85, 0.36, 1) forwards;
+            pointer-events: none;
+            text-shadow: 0 0 25px rgba(255, 150, 200, 0.6);
+        }
+
+        .click-sakura:nth-child(odd) {
+            animation-duration: 2.2s;
+        }
+        .click-sakura:nth-child(3n) {
+            animation-duration: 2.8s;
+        }
+
+        @keyframes clickSakuraFall {
+            0% { opacity: 0; transform: translateY(-20px) translateX(0px) rotate(0deg) scale(0.4); }
+            15% { opacity: 1; transform: translateY(15px) translateX(20px) rotate(25deg) scale(1.2); }
+            50% { opacity: 1; transform: translateY(70px) translateX(-15px) rotate(180deg) scale(1); }
+            85% { opacity: 0.8; transform: translateY(140px) translateX(25px) rotate(340deg) scale(0.9); }
+            100% { opacity: 0; transform: translateY(220px) translateX(5px) rotate(420deg) scale(0.5); }
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 182, 193, 0.04);
+            width: 100%;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 10%;
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ff6b9d, #ffb7c5, #ff8aae, transparent);
+            background-size: 300% 100%;
+            animation: borderGlowSocial 2.5s ease-in-out infinite;
+            border-radius: 99px;
+            opacity: 0.4;
+        }
+
+        .footer p {
+            font-size: 11px;
+            color: #b090a0;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(255, 107, 157, 0.04);
+        }
+
+        .footer span {
+            color: #ff8aae;
+            text-shadow: 0 0 12px rgba(255, 107, 157, 0.08);
+        }
+
+        .video-wrapper {
+            height: 0;
+            overflow: hidden;
+        }
+        .video-wrapper iframe {
+            display: none;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            .welcome-char {
+                font-size: 40px;
+            }
+            .welcome-wrapper {
+                gap: 3px;
+            }
+            .card {
+                padding: 20px 14px 18px;
+                border-radius: 32px;
+                max-width: 340px;
+                background: rgba(255, 182, 193, 0.06);
+                backdrop-filter: blur(14px) saturate(1.2);
+                -webkit-backdrop-filter: blur(14px) saturate(1.2);
+            }
+            .card::before { border-radius: 34px; }
+            .card::after { border-radius: 30px; }
+            .card-drops { border-radius: 32px; }
+            .card-drop { display: none; }
+            .header h1 { font-size: 24px; }
+            .datetime .time { font-size: 22px; }
+            .social-item { padding: 8px 10px; font-size: 12px; }
+            .social-item .icon { width: 22px; height: 22px; }
+            .social-item .icon svg { width: 18px; height: 18px; }
+            .social-item .text { font-size: 12px; }
+            .music-btn { padding: 5px 12px; font-size: 12px; min-width: 60px; }
+            .song-title { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== WELCOME OVERLAY ===== -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <div class="welcome-wrapper">
+            <span class="welcome-char" data-char="W">W</span>
+            <span class="welcome-char" data-char="e">e</span>
+            <span class="welcome-char" data-char="l">l</span>
+            <span class="welcome-char" data-char="c">c</span>
+            <span class="welcome-char" data-char="o">o</span>
+            <span class="welcome-char" data-char="m">m</span>
+            <span class="welcome-char" data-char="e">e</span>
+        </div>
+    </div>
+
+    <!-- ===== HOA ANH ĐÀO RƠI NỀN ===== -->
+    <div class="sakura-bg" id="sakuraBg"></div>
+
+    <!-- ===== HIỆU ỨNG CLICK ===== -->
+    <div class="click-effect-container" id="clickEffectContainer"></div>
+
+    <!-- ===== CARD ===== -->
+    <div class="card" id="card">
+        <div class="card-drops" id="cardDrops"></div>
+
+        <header class="header">
+            <h1>Welcome</h1>
+            <p>Luu Van Huy</p>
+        </header>
+
+        <section class="datetime">
+            <div class="time" id="timeDisplay">00:00:00</div>
+            <div class="date" id="dateDisplay">Thứ Hai, 01/09/2026</div>
+        </section>
+
+        <section class="music-section">
+            <div class="song-title">🎵 Anh Là Ngoại Lệ Của Em - Phương Ly</div>
+            <div class="progress-bar" id="progressBar">
+                <div class="fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-time">
+                <span id="currentTime">0:00</span>
+                <span id="totalTime">0:00</span>
+            </div>
+            <div class="music-controls">
+                <button class="music-btn" id="playBtn">▶ Tiếp tục</button>
+                <button class="music-btn" id="pauseBtn">Tạm dừng</button>
+            </div>
+        </section>
+
+        <section class="social-grid">
+            <a href="https://www.tiktok.com/@luuvanhuyh?_r=1&_t=ZS-99NCgFS0B6L" target="_blank" rel="noopener noreferrer" class="social-item">
+                <span class="icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.6 5.82s.51.5 1.52.5c0 0-.01-1.37-.01-1.37-.87-.07-1.51-.53-1.51-.53l.01 1.4h-.01zm-5.9-.67v11.46c0 .01-.01.04-.01.07-.08 1.64-1.47 2.94-3.14 2.94-1.74 0-3.15-1.41-3.15-3.15s1.41-3.15 3.15-3.15c.28 0 .54.04.8.12v-1.73c-1.49-.15-2.81.38-3.65 1.33-.85.95-1.3 2.23-1.15 3.58.15 1.34.88 2.54 2.01 3.22 1.13.68 2.52.79 3.8.3 1.28-.49 2.26-1.52 2.61-2.79.18-.64.22-1.33.13-2.01v-5.72c.01 0 .01-.01.01-.01v-.04c-.39.31-.87.54-1.41.64-.4.08-.83.07-1.22-.01l.01 6.69c-.35.27-.76.47-1.21.57-.64.14-1.31.09-1.92-.16-.61-.25-1.12-.7-1.45-1.27-.33-.57-.46-1.24-.37-1.89.09-.65.39-1.26.86-1.72.47-.46 1.1-.73 1.77-.78.22-.01.44.01.65.06v-1.73h-.01c-1.49-.15-2.81.38-3.65 1.33-.85.95-1.3 2.23-1.15 3.58.15 1.34.88 2.54 2.01 3.22 1.13.68 2.52.79 3.8.3 1.28-.49 2.26-1.52 2.61-2.79.18-.64.22-1.33.13-2.01v-5.72c.01 0 .01-.01.01-.01v-.04z"/>
+                    </svg>
+                </span>
+                <span class="text">TikTok</span>
+                <span class="arrow">→</span>
+            </a>
+
+            <a href="https://zalo.me/0876008142" target="_blank" rel="noopener noreferrer" class="social-item">
+                <span class="icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v6l5.25 3.15L17 12.23l-4-2.37V7z"/>
+                    </svg>
+                </span>
+                <span class="text">Zalo</span>
+                <span class="arrow">→</span>
+            </a>
+
+            <a href="https://www.facebook.com/share/19FeN343Mw/" target="_blank" rel="noopener noreferrer" class="social-item">
+                <span class="icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                </span>
+                <span class="text">Facebook</span>
+                <span class="arrow">→</span>
+            </a>
+
+            <a href="https://discord.gg/8QtEnwYr" target="_blank" rel="noopener noreferrer" class="social-item">
+                <span class="icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.317 4.369a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.02.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.02.077.077 0 0 0 .032-.054c.5-5.093-.838-9.585-3.549-13.664a.068.068 0 0 0-.032-.027zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                </span>
+                <span class="text">Discord</span>
+                <span class="arrow">→</span>
+            </a>
+        </section>
+
+        <footer class="footer">
+            <p>Made with <span>❤</span> by <span>Luu Van Huy</span></p>
+        </footer>
+    </div>
+
+    <!-- ===== YOUTUBE ===== -->
+    <div class="video-wrapper">
+        <iframe id="youtubePlayer" src="https://www.youtube.com/embed/8Byd6elEkbw?enablejsapi=1&autoplay=1" allow="autoplay; encrypted-media">
+        </iframe>
+    </div>
+
+    <script>
+        // ============================================================
+        // 1. WELCOME - TỰ ĐỘNG ẨN (MƯỢT HƠN)
+        // ============================================================
+        setTimeout(() => {
+            document.getElementById('welcomeOverlay').classList.add('hidden');
+        }, 2600); // Giảm thời gian chờ từ 2800ms xuống 2600ms
+
+        // ============================================================
+        // 2. GIỌT NƯỚC RƠI
+        // ============================================================
+        (function() {
+            const container = document.getElementById('cardDrops');
+            container.innerHTML = '';
+
+            const dropCount = 20;
+            const positions = [];
+
+            for (let i = 0; i < dropCount; i++) {
+                positions.push({
+                    left: 2 + Math.random() * 96,
+                    top: -10 + Math.random() * 20,
+                    size: 8 + Math.random() * 14,
+                    duration: 6 + Math.random() * 8,
+                    delay: Math.random() * 14,
+                });
+            }
+
+            positions.sort((a, b) => a.delay - b.delay);
+
+            positions.forEach((pos) => {
+                const drop = document.createElement('div');
+                drop.className = 'card-drop';
+                const size = pos.size;
+                drop.style.width = size + 'px';
+                drop.style.height = (size * 2.8) + 'px';
+                drop.style.left = pos.left + '%';
+                drop.style.top = pos.top + '%';
+                drop.style.animationDuration = pos.duration + 's';
+                drop.style.animationDelay = pos.delay + 's';
+                drop.style.opacity = 0;
+                drop.style.background = `rgba(255, 255, 255, ${0.05 + Math.random() * 0.08})`;
+                container.appendChild(drop);
+            });
+
+            setTimeout(() => {
+                const extraDrops = [
+                    { left: 10, size: 11, duration: 14, delay: 2 },
+                    { left: 35, size: 7, duration: 17, delay: 5 },
+                    { left: 65, size: 13, duration: 11, delay: 8 },
+                    { left: 50, size: 8, duration: 19, delay: 3 },
+                    { left: 85, size: 10, duration: 15, delay: 7 },
+                ];
+                extraDrops.forEach((pos) => {
+                    const drop = document.createElement('div');
+                    drop.className = 'card-drop';
+                    const size = pos.size || 8;
+                    drop.style.width = size + 'px';
+                    drop.style.height = (size * 2.8) + 'px';
+                    drop.style.left = pos.left + '%';
+                    drop.style.top = '-5%';
+                    drop.style.animationDuration = pos.duration + 's';
+                    drop.style.animationDelay = pos.delay + 's';
+                    drop.style.opacity = 0;
+                    drop.style.background = `rgba(255, 255, 255, 0.06)`;
+                    container.appendChild(drop);
+                });
+            }, 100);
+        })();
+
+        // ============================================================
+        // 3. HOA ANH ĐÀO RƠI NỀN
+        // ============================================================
+        (function() {
+            const container = document.getElementById('sakuraBg');
+            const symbols = ['🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸'];
+            for (let i = 0; i < 35; i++) {
+                const el = document.createElement('div');
+                el.className = 'sakura';
+                el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.fontSize = (16 + Math.random() * 24) + 'px';
+                el.style.animationDuration = (10 + Math.random() * 20) + 's';
+                el.style.animationDelay = (Math.random() * 15) + 's';
+                el.style.opacity = 0.3 + Math.random() * 0.5;
+                container.appendChild(el);
+            }
+        })();
+
+        // ============================================================
+        // 4. HIỆU ỨNG CLICK
+        // ============================================================
+        (function() {
+            const container = document.getElementById('clickEffectContainer');
+            const symbols = ['🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸', '🌸'];
+
+            function createEffect(x, y) {
+                const count = 8 + Math.floor(Math.random() * 8);
+                for (let i = 0; i < count; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'click-sakura';
+                    el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                    const spreadX = (Math.random() - 0.5) * 160;
+                    const spreadY = (Math.random() - 0.5) * 100 - 30;
+                    el.style.left = (x + spreadX) + 'px';
+                    el.style.top = (y + spreadY) + 'px';
+                    el.style.fontSize = (20 + Math.random() * 28) + 'px';
+                    el.style.animationDuration = (2 + Math.random() * 1.2) + 's';
+                    el.style.animationDelay = (Math.random() * 0.4) + 's';
+                    el.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    container.appendChild(el);
+                    setTimeout(() => {
+                        if (el.parentNode) el.remove();
+                    }, 3500);
+                }
+            }
+
+            const card = document.getElementById('card');
+            card.addEventListener('click', function(e) {
+                const target = e.target;
+                if (target.closest('.music-btn') || target.closest('a') || target.closest('.progress-bar')) {
+                    return;
+                }
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                createEffect(x, y);
+            });
+
+            card.addEventListener('touchstart', function(e) {
+                const touch = e.touches[0];
+                if (!touch) return;
+                const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                if (target && (target.closest('.music-btn') || target.closest('a') || target.closest(
+                        '.progress-bar'))) {
+                    return;
+                }
+                const rect = card.getBoundingClientRect();
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                createEffect(x, y);
+            }, { passive: true });
+        })();
+
+        // ============================================================
+        // 5. ĐỒNG HỒ
+        // ============================================================
+        (function() {
+            const timeEl = document.getElementById('timeDisplay');
+            const dateEl = document.getElementById('dateDisplay');
+            const DAYS = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+
+            function update() {
+                const n = new Date();
+                timeEl.textContent =
+                    `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
+                dateEl.textContent =
+                    `${DAYS[n.getDay()]}, ${String(n.getDate()).padStart(2,'0')}/${String(n.getMonth()+1).padStart(2,'0')}/${n.getFullYear()}`;
+            }
+            update();
+            setInterval(update, 1000);
+        })();
+
+        // ============================================================
+        // 6. YOUTUBE PLAYER
+        // ============================================================
+        (function() {
+            let player = null,
+                isReady = false,
+                attempts = 0;
+            const playBtn = document.getElementById('playBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const progressFill = document.getElementById('progressFill');
+            const currentTimeEl = document.getElementById('currentTime');
+            const totalTimeEl = document.getElementById('totalTime');
+            const progressBar = document.getElementById('progressBar');
+
+            function fmt(s) {
+                if (!s || s < 0) return '0:00';
+                const m = Math.floor(s / 60);
+                const sec = Math.floor(s % 60);
+                return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+            }
+
+            function updateProgress() {
+                if (!player || !player.getCurrentTime) return;
+                const c = player.getCurrentTime();
+                const d = player.getDuration();
+                if (d > 0) {
+                    progressFill.style.width = (c / d * 100) + '%';
+                    currentTimeEl.textContent = fmt(c);
+                    totalTimeEl.textContent = fmt(d);
+                }
+            }
+
+            window.onYouTubeIframeAPIReady = function() {
+                player = new YT.Player('youtubePlayer', {
+                    events: {
+                        onReady: function(e) {
+                            isReady = true;
+                            totalTimeEl.textContent = fmt(player.getDuration());
+                            setInterval(updateProgress, 500);
+                            player.playVideo();
+                        },
+                        onStateChange: function(e) {
+                            const s = e.data;
+                            if (s === YT.PlayerState.PLAYING) {
+                                playBtn.textContent = '▶ Tiếp tục';
+                            } else if (s === YT.PlayerState.PAUSED) {
+                                playBtn.textContent = '▶ Phát';
+                            } else if (s === YT.PlayerState.ENDED) {
+                                playBtn.textContent = '▶ Phát lại';
+                            }
+                        },
+                        onError: function() {
+                            if (attempts < 5) {
+                                attempts++;
+                                setTimeout(() => {
+                                    if (player && isReady) player.playVideo();
+                                }, 2000);
+                            }
+                        }
+                    }
+                });
+            };
+
+            progressBar.addEventListener('click', function(e) {
+                if (!player || !player.getDuration) return;
+                const rect = this.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width;
+                player.seekTo(x * player.getDuration(), true);
+            });
+
+            playBtn.addEventListener('click', function() {
+                if (!isReady) {
+                    alert('⏳ Đang tải nhạc, vui lòng chờ...');
+                    return;
+                }
+                const s = player.getPlayerState();
+                if (s === YT.PlayerState.PAUSED || s === YT.PlayerState.ENDED || s === -1) {
+                    player.playVideo();
+                } else if (s !== YT.PlayerState.PLAYING) {
+                    player.playVideo();
+                }
+            });
+
+            pauseBtn.addEventListener('click', function() {
+                if (!isReady) {
+                    alert('⏳ Đang tải nhạc, vui lòng chờ...');
+                    return;
+                }
+                if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+                    player.pauseVideo();
+                }
+            });
+
+            const script = document.createElement('script');
+            script.src = 'https://www.youtube.com/iframe_api';
+            document.head.appendChild(script);
+
+            setTimeout(() => {
+                if (isReady) {
+                    try { player.playVideo(); } catch (_) {}
+                }
+            }, 3000);
+        })();
+    </script>
+</body>
+</html>
